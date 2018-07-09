@@ -1,0 +1,5 @@
+FROM nginx:alpine
+
+RUN date | tee /usr/share/nginx/html/version.txt /usr/share/nginx/html/index.html
+COPY output /usr/share/nginx/html/hsl
+COPY hsltimetables.conf /etc/nginx/conf.d/hsltimetables.conf
