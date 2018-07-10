@@ -3,7 +3,7 @@ const { fetchStopIds } = require("./scripts/stops");
 const generator = require("./scripts/generator");
 
 
-const timetableCount = parseInt(process.env.TIMETABLE_LIMIT) || 0
+const timetableCount = parseInt(process.env.TIMETABLE_LIMIT) || 0;
 async function generateStopTimetables(representativeDate, forceStopIds) {
     let stopIds = forceStopIds || await fetchStopIds();
     if (timetableCount > 0) {
@@ -20,11 +20,16 @@ async function generateStopTimetables(representativeDate, forceStopIds) {
 
 
 
-const today = new Date().toISOString().substr(0, 10);
+const today = new Date();
 
-const representativeDate = process.argv.length > 2 ? process.argv[2] : today;
+const daysAdvance = parseInt(process.env.TIMETABLE_DAYS_ADVANCE) || 0;
+
+const advancedDate = new Date(today.getFullYear(),today.getMonth(),today.getDate() + daysAdvance).toISOString().substr(0, 10);
+
+const representativeDate = process.argv.length > 2 ? process.argv[2] : advancedDate;
 let forceStopIds = process.argv.length > 3 ? process.argv[3] : null;
 
+console.log('Generating timetables for ',representativeDate);
 if (forceStopIds) {
     if (fs.existsSync(forceStopIds)) {
         forceStopIds = fs.readFileSync(forceStopIds, { encoding: "utf-8" }).split(/(\D)/).map(parseFloat).filter(id => !Number.isNaN(id));
