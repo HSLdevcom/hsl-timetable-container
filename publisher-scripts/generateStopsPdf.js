@@ -3,10 +3,13 @@ const { fetchStopIds } = require("./scripts/stops");
 const generator = require("./scripts/generator");
 
 
-const
+const timetableCount = parseInt(process.env.TIMETABLE_LIMIT) || 0
 async function generateStopTimetables(representativeDate, forceStopIds) {
-    const stopIds = forceStopIds || await fetchStopIds();
-    return Promise.all(stopIds.slice(0,5).map(stopId => generator.generate({
+    let stopIds = forceStopIds || await fetchStopIds();
+    if (timetableCount > 0) {
+        stopIds = stopIds.slice(0,5)
+    }
+    return Promise.all(stopIds.map(stopId => generator.generate({
         id: stopId,
         component: "Timetable",
         props: { stopId, date: representativeDate, printTimetablesAsA4: true },
