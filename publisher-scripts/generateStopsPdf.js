@@ -2,9 +2,11 @@ const fs = require("fs");
 const { fetchStopIds } = require("./scripts/stops");
 const generator = require("./scripts/generator");
 
+
+const
 async function generateStopTimetables(representativeDate, forceStopIds) {
     const stopIds = forceStopIds || await fetchStopIds();
-    return Promise.all(stopIds.slice(0,500).map(stopId => generator.generate({
+    return Promise.all(stopIds.slice(0,5).map(stopId => generator.generate({
         id: stopId,
         component: "Timetable",
         props: { stopId, date: representativeDate, printTimetablesAsA4: true },
