@@ -7,7 +7,7 @@ const timetableCount = parseInt(process.env.TIMETABLE_LIMIT) || 0
 async function generateStopTimetables(representativeDate, forceStopIds) {
     let stopIds = forceStopIds || await fetchStopIds();
     if (timetableCount > 0) {
-        stopIds = stopIds.slice(0,5)
+        stopIds = stopIds.slice(0,timetableCount)
     }
     return Promise.all(stopIds.map(stopId => generator.generate({
         id: stopId,
