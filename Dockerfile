@@ -9,7 +9,7 @@ RUN cd /opt/timetable-data-builder ; tar xzf docker-18.03.1-ce.tgz ; cp docker/*
 
 VOLUME /cronlogs
 
-RUN apt-get update && apt-get install -y p7zip-full cron
+RUN apt-get update && apt-get install -y p7zip-full cron curl jq
 
 ADD publisher-scripts /opt/publisher
 ADD fonts.zip /opt/publisher/fonts.zip
