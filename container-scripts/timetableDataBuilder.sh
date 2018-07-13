@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
+/opt/timetable-data-builder/setEnvs.sh
+
 echo "HSL timetable data build started"
 if [ -v SLACK_WEBHOOK_URL ]; then
     curl -X POST -H 'Content-type: application/json' \

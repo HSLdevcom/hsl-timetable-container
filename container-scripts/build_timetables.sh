@@ -10,7 +10,6 @@ DOCKER_CUSTOM_IMAGE_TAG=$DOCKER_IMAGE:$DOCKER_TAG
 DOCKER_DATE_IMAGE=$DOCKER_IMAGE:$DATE-$DOCKER_TAG
 
 cd /opt/publisher
-7z x -p$FONTSTACK_PASSWORD -o/fonts /opt/publisher/fonts.zip
 ./generate.sh | tee /tmp/generate.log
 
 cp -r /opt/publisher/output /opt/timetable-data-builder/hsl-timetable-data-container/output

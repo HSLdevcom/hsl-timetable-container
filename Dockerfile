@@ -20,5 +20,8 @@ ADD hsl-timetable-data-container /opt/timetable-data-builder/hsl-timetable-data-
 ADD timetable-builder.cron /etc/cron.d/timetable-builder
 RUN chmod 0644 /etc/cron.d/timetable-builder
 
-CMD touch /cronlogs/cron.log && cron && tail -f /cronlogs/cron.log
+CMD touch /cronlogs/cron.log && \
+    /opt/timetable-data-builder/startServer.sh && \
+    /opt/timetable-data-builder/copyEnvs.sh && \
+    cron && tail -f /cronlogs/cron.log
 #CMD ["/opt/timetable-data-builder/build_timetables.sh"]
