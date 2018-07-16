@@ -1,4 +1,4 @@
-FROM hsl-map-publisher
+FROM hsldevcom/hsl-map-publisher:latest
 
 USER root
 
@@ -17,11 +17,4 @@ ADD fonts.zip /opt/publisher/fonts.zip
 ADD container-scripts /opt/timetable-data-builder
 ADD hsl-timetable-data-container /opt/timetable-data-builder/hsl-timetable-data-container
 
-ADD timetable-builder.cron /etc/cron.d/timetable-builder
-RUN chmod 0644 /etc/cron.d/timetable-builder
-
-CMD touch /cronlogs/cron.log && \
-    /opt/timetable-data-builder/startServer.sh && \
-    /opt/timetable-data-builder/copyEnvs.sh && \
-    cron && tail -f /cronlogs/cron.log
-#CMD ["/opt/timetable-data-builder/build_timetables.sh"]
+CMD ["/opt/timetable-data-builder/timetableDataBuilder.sh"]

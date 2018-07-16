@@ -17,6 +17,7 @@ cd /opt/publisher
 cp -r /opt/publisher/output /opt/timetable-data-builder/hsl-timetable-data-container/output
 cd /opt/timetable-data-builder/hsl-timetable-data-container
 
+echo "Tagging as $DOCKER_CUSTOM_IMAGE_TAG"
 docker build -t $DOCKER_CUSTOM_IMAGE_TAG -f Dockerfile.data-container .
 
 if [ -v DOCKER_TAG ] && [ "$DOCKER_TAG" != "undefined" ]; then
@@ -25,9 +26,12 @@ if [ -v DOCKER_TAG ] && [ "$DOCKER_TAG" != "undefined" ]; then
     docker tag $DOCKER_CUSTOM_IMAGE_TAG $DOCKER_DATE_IMAGE
 
     docker push $DOCKER_DATE_IMAGE
+    echo "HSL timetable container pushed as $DOCKER_DATE_IMAGE"
+
     docker push $DOCKER_CUSTOM_IMAGE_TAG
+    echo "HSL timetable container pushed as $DOCKER_CUSTOM_IMAGE_TAG"
 else
-    exit 0
+    echo "No tag defined"
 fi
 
 
