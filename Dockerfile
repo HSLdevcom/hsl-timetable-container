@@ -17,4 +17,4 @@ ADD fonts.zip /opt/publisher/fonts.zip
 ADD container-scripts /opt/timetable-data-builder
 ADD hsl-timetable-data-container /opt/timetable-data-builder/hsl-timetable-data-container
 
-CMD ["/opt/timetable-data-builder/timetableDataBuilder.sh"]
+CMD /opt/timetable-data-builder/startServer.sh && /opt/timetable-data-builder/timetableDataBuilder.sh
