@@ -1,9 +1,26 @@
 const fs = require("fs");
-const { fetchStopIds } = require("./scripts/stops");
+const fetch = require("node-fetch");
 const generator = require("./scripts/generator");
 
 
 const timetableCount = parseInt(process.env.TIMETABLE_LIMIT) || 0;
+
+
+
+const API_URL = "https://kartat.hsldev.com/jore/graphql";
+
+async function fetchStopIds() {
+    const options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: "query AllStops {allStops { nodes { stopId}} }" }),
+    };
+
+    const response = await fetch(API_URL, options);
+    const json = await response.json();
+    return json.data.allStops.nodes.map(stop => stop.stopId);
+}
+
 async function generateStopTimetables(representativeDate, forceStopIds) {
     let stopIds = forceStopIds || await fetchStopIds();
     if (timetableCount > 0) {
