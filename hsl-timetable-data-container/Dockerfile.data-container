@@ -1,7 +1,7 @@
 FROM nginx:alpine
 
 RUN date | tee /usr/share/nginx/html/version.txt /usr/share/nginx/html/index.html
-COPY output/ /usr/share/nginx/html/hsl/stops/
+COPY output /usr/share/nginx/html/hsl/stops
 COPY nginx.template /etc/nginx/nginx.template
 
 CMD /bin/sh -c "envsubst < /etc/nginx/nginx.template > /etc/nginx/nginx.conf && exec nginx -g 'daemon off;'"
