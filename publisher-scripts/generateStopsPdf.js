@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
 const generator = require("./scripts/generator");
 
 
-const timetableCount = parseInt(process.env.TIMETABLE_LIMIT) || 0;
+const timetableCount = parseInt(process.env.STOP_TIMETABLE_LIMIT) || 0;
 
 
 
