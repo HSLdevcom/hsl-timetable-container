@@ -13,8 +13,11 @@ export DOCKER_API_VERSION=1.23
 
 cd /opt/publisher
 ./generate.sh | tee /tmp/generate.log
+./fetch.sh | tee /tmp/fetch.log
 
-cp -r /opt/publisher/output/. /opt/timetable-data-builder/hsl-timetable-data-container/output/
+cp -r /opt/publisher/output/. /opt/timetable-data-builder/hsl-timetable-data-container/output-stops/
+cp -r /opt/publisher/output-routes/. /opt/timetable-data-builder/hsl-timetable-data-container/output-routes/
+
 cd /opt/timetable-data-builder/hsl-timetable-data-container
 
 echo "Tagging as $DOCKER_CUSTOM_IMAGE_TAG"
