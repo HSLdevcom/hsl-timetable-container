@@ -1,7 +1,7 @@
 const fs = require("fs");
 const fetch = require("node-fetch");
 
-const TIMETABLE_COUNT = parseInt(process.env.TIMETABLE_LIMIT) || 0;
+const ROUTE_TIMETABLE_COUNT = parseInt(process.env.ROUTE_TIMETABLE_LIMIT) || 0;
 
 const DIGITRANSIT_API_URL = process.env.DIGITRANSIT_API_URL || "https://api.digitransit.fi";
 
@@ -80,7 +80,7 @@ async function fetchRouteTimetable(routeId) {
 async function getFetchStatuses(routeIds) {
     let routeFetchResults = {};
 
-    const limit = routeIds.length;
+    const limit = ROUTE_TIMETABLE_COUNT == 0 ? routeIds.length : ROUTE_TIMETABLE_COUNT;
     for (let i = 0; i < limit; i++) {
         // Remove HSL:
         const routeId = routeIds[i].gtfsId.substring(4);
@@ -106,7 +106,7 @@ fetchRouteIds()
         for (const id of Object.keys(statuses)) {
             const item = statuses[id];
             // if could not find a download link for route and there is a pdf for route which first 4 numbers are the same
-            if (item.success == 0 && id.length > 3 && id.substring(0, 3) in statuses && statuses[id.substring(0, 3)].success == 2) {
+            if (item.success == 0 && id.length > 4 && id.substring(0, 3) in statuses && statuses[id.substring(0, 3)].success == 2) {
                 console.log(`mapping ${id} to ${id.substring(0, 3)}`);
                 // link routes id to id of the pdf that contains its timetables
                 filteredObjects[id] = id.substring(0, 3);
