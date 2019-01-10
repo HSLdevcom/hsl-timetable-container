@@ -28,7 +28,7 @@ http {
     gzip  on;
 
     server {
-        listen       ${PORT};
+        listen       8080;
 
         #charset koi8-r;
         #access_log  /var/log/nginx/host.access.log  main;
