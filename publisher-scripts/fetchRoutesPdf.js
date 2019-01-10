@@ -106,10 +106,10 @@ fetchRouteIds()
         for (const id of Object.keys(statuses)) {
             const item = statuses[id];
             // if could not find a download link for route and there is a pdf for route which first 4 numbers are the same
-            if (item.success == 0 && id.length > 4 && id.substring(0, 3) in statuses && statuses[id.substring(0, 3)].success == 2) {
-                console.log(`mapping ${id} to ${id.substring(0, 3)}`);
+            if (item.success == 0 && id.length > 4 && id.substring(0, 4) in statuses && statuses[id.substring(0, 4)].success == 2) {
+                console.log(`mapping ${id} to ${id.substring(0, 4)}`);
                 // link routes id to id of the pdf that contains its timetables
-                filteredObjects[id] = id.substring(0, 3);
+                filteredObjects[id] = id.substring(0, 4);
                 successfulCount += 1;
             } else if (item.success == 2) {
                 filteredObjects[id] = id;
