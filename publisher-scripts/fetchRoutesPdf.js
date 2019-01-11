@@ -7,7 +7,7 @@ const DIGITRANSIT_API_URL = process.env.DIGITRANSIT_API_URL || "https://api.dig
 
 const API_URL = `${DIGITRANSIT_API_URL}/routing/v1/routers/hsl/index/graphql`;
 
-const TAKU_API_URL = "https://taku.hsl.fi/fi/aikataulu";
+const TAKU_API_URL = process.env.TAKU_API_URL;
 
 // base64 encoded basic auth
 const TAKU_KEY = process.env.TAKU_KEY;
@@ -39,7 +39,7 @@ async function fetchRouteTimetable(routeId) {
         fetch(`${TAKU_API_URL}/${routeId}/`, options)
         .then(res => res.json())
         .then(json => {
-            if (json.status == "success") {
+            if (json.status === "success") {
                 // download link for pdf
                 const pdfLocation = json.results.pdf;
                 fetch(pdfLocation)
@@ -80,7 +80,7 @@ async function fetchRouteTimetable(routeId) {
 async function getFetchStatuses(routeIds) {
     let routeFetchResults = {};
 
-    const limit = ROUTE_TIMETABLE_COUNT == 0 ? routeIds.length : ROUTE_TIMETABLE_COUNT;
+    const limit = ROUTE_TIMETABLE_COUNT === 0 ? routeIds.length : ROUTE_TIMETABLE_COUNT;
     for (let i = 0; i < limit; i++) {
         // Remove HSL:
         const routeId = routeIds[i].gtfsId.substring(4);
@@ -106,12 +106,15 @@ fetchRouteIds()
         for (const id of Object.keys(statuses)) {
             const item = statuses[id];
             // if could not find a download link for route and there is a pdf for route which first 4 numbers are the same
-            if (item.success == 0 && id.length > 4 && id.substring(0, 4) in statuses && statuses[id.substring(0, 4)].success == 2) {
-                console.log(`mapping ${id} to ${id.substring(0, 4)}`);
+
+
+            const shortenedID = id.substring(0, 4);
+            if (item.success === 0 && id.length > 4 && shortenedID in statuses && statuses[shortenedID].success === 2) {
+                console.log(`mapping ${id} to ${shortenedID}`);
                 // link routes id to id of the pdf that contains its timetables
-                filteredObjects[id] = id.substring(0, 4);
+                filteredObjects[id] = shortenedID;
                 successfulCount += 1;
-            } else if (item.success == 2) {
+            } else if (item.success === 2) {
                 filteredObjects[id] = id;
                 successfulCount += 1;
             }
