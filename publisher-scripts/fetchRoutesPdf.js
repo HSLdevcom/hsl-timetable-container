@@ -82,11 +82,14 @@ async function getFetchStatuses(routeIds) {
 
     const limit = ROUTE_TIMETABLE_COUNT === 0 ? routeIds.length : ROUTE_TIMETABLE_COUNT;
     for (let i = 0; i < limit; i++) {
-        // Remove HSL:
-        const routeId = routeIds[i].gtfsId.substring(4);
-        // Synchronously download pdfs to avoid failures
-        const result = await fetchRouteTimetable(routeId);
-        routeFetchResults[result.routeId] = result;
+        // Don't add routes that don't have HSL feedID
+        if (routeIds[i].gtfsId.includes("HSL:")) {
+            // Remove HSL:
+            const routeId = routeIds[i].gtfsId.substring(4);
+            // Synchronously download pdfs to avoid failures
+            const result = await fetchRouteTimetable(routeId);
+            routeFetchResults[result.routeId] = result;
+        }
     }
     
     return routeFetchResults;
