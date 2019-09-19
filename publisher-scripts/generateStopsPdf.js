@@ -7,7 +7,7 @@ const timetableCount = parseInt(process.env.STOP_TIMETABLE_LIMIT) || 0;
 
 
 
-const API_URL = "https://kartat.hsldev.com/jore/graphql";
+const API_URL = "https://prod.kartat.hsl.fi/jore/graphql";
 
 async function fetchStopIds() {
     const options = {
