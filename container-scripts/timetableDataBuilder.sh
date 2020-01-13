@@ -29,7 +29,8 @@ while true; do
 
 
     /opt/timetable-data-builder/build_timetables.sh
-    if [ $? -eq 0 ]; then
+    SUCCESS=$?
+    if [ $SUCCESS -eq 0 ]; then
         echo "HSL timetable data build finished"
         if [ -v SLACK_WEBHOOK_URL ]; then
                 { echo -e "HSL timetable data build finished:\n..."; tail -n 1 /tmp/generate.log && tail -n 1 /tmp/fetch.log; } | \
@@ -46,6 +47,6 @@ while true; do
 
     if [[ "$BUILD_INTERVAL" -le 0 ]]; then
         #run only once
-        exit 0
+        exit $SUCCESS
     fi
 done
