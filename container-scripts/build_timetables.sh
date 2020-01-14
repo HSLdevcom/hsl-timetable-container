@@ -9,8 +9,6 @@ DOCKER_IMAGE=$ORG/$CONTAINER
 DOCKER_CUSTOM_IMAGE_TAG=$DOCKER_IMAGE:$DOCKER_TAG
 DOCKER_DATE_IMAGE=$DOCKER_IMAGE:$DATE-$DOCKER_TAG
 
-export DOCKER_API_VERSION=${DOCKER_API_VERSION:-1.23}
-
 cd /opt/publisher
 ./generate.sh | tee /tmp/generate.log
 ./fetch.sh | tee /tmp/fetch.log
