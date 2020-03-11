@@ -82,8 +82,8 @@ async function getFetchStatuses(routeIds) {
 
     const limit = ROUTE_TIMETABLE_COUNT === 0 ? routeIds.length : ROUTE_TIMETABLE_COUNT;
     for (let i = 0; i < limit; i++) {
-        // Don't add routes that don't have HSL feedID
-        if (routeIds[i].gtfsId.includes("HSL:")) {
+        // Don't add routes that don't have HSL feedID or HSL train routes (route ID HSL:300xx)
+        if (routeIds[i].gtfsId.startsWith("HSL:") && !routeIds[i].gtfsId.startsWith("HSL:300")) {
             // Remove HSL:
             const routeId = routeIds[i].gtfsId.substring(4);
             // Synchronously download pdfs to avoid failures
