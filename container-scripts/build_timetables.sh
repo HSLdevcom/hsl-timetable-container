@@ -19,6 +19,7 @@ cp -r /opt/publisher/output-routes/. /opt/timetable-data-builder/hsl-timetable-d
 cd /opt/timetable-data-builder/hsl-timetable-data-container
 
 echo "Tagging as $DOCKER_IMAGE_TAG_LONG"
+docker login -u $DOCKER_USER -p $DOCKER_AUTH
 docker build -t $DOCKER_IMAGE_TAG_LONG -f Dockerfile.data-container .
 
 if [ -v DOCKER_TAG ] && [ "$DOCKER_TAG" != "undefined" ]; then
