@@ -22,7 +22,6 @@ docker login -u $DOCKER_USER -p $DOCKER_AUTH
 docker build -t $DOCKER_IMAGE_TAG_LONG -f Dockerfile.data-container .
 
 if [ -v DOCKER_TAG ] && [ "$DOCKER_TAG" != "undefined" ]; then
-    docker login -u $DOCKER_USER -p $DOCKER_AUTH
 
     docker tag $DOCKER_IMAGE_TAG_LONG $DOCKER_IMAGE_TAG
 

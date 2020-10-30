@@ -14,7 +14,6 @@ docker login -u $DOCKER_USER -p $DOCKER_AUTH
 docker build --tag=$DOCKER_IMAGE_TAG_LONG .
 
 if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then
-  docker login -u $DOCKER_USER -p $DOCKER_AUTH
   docker push $DOCKER_IMAGE_TAG_LONG
   docker tag $DOCKER_IMAGE_TAG_LONG $DOCKER_IMAGE_LATEST
   docker push $DOCKER_IMAGE_LATEST
