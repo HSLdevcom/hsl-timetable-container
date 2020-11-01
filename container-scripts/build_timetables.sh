@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 set -e
 
-DATE=`date +"%Y-%m-%d"`
-
 ORG=${ORG:-hsldevcom}
-CONTAINER=hsl-timetable-container
-DOCKER_IMAGE=$ORG/$CONTAINER
-DOCKER_CUSTOM_IMAGE_TAG=$DOCKER_IMAGE:$DOCKER_TAG
-DOCKER_DATE_IMAGE=$DOCKER_IMAGE:$DATE-$DOCKER_TAG
+DOCKER_IMAGE=$ORG/hsl-timetable-container
+
+DOCKER_TAG_LONG=$DOCKER_TAG-$(date +"%Y-%m-%dT%H.%M.%S")
+DOCKER_IMAGE_TAG=$DOCKER_IMAGE:$DOCKER_TAG
+DOCKER_IMAGE_TAG_LONG=$DOCKER_IMAGE:$DOCKER_TAG_LONG
 
 cd /opt/publisher
 ./generate.sh | tee /tmp/generate.log
@@ -18,19 +17,19 @@ cp -r /opt/publisher/output-routes/. /opt/timetable-data-builder/hsl-timetable-d
 
 cd /opt/timetable-data-builder/hsl-timetable-data-container
 
-echo "Tagging as $DOCKER_CUSTOM_IMAGE_TAG"
-docker build -t $DOCKER_CUSTOM_IMAGE_TAG -f Dockerfile.data-container .
+echo "Tagging as $DOCKER_IMAGE_TAG_LONG"
+docker login -u $DOCKER_USER -p $DOCKER_AUTH
+docker build -t $DOCKER_IMAGE_TAG_LONG -f Dockerfile.data-container .
 
 if [ -v DOCKER_TAG ] && [ "$DOCKER_TAG" != "undefined" ]; then
-    docker login -u $DOCKER_USER -p $DOCKER_AUTH
 
-    docker tag $DOCKER_CUSTOM_IMAGE_TAG $DOCKER_DATE_IMAGE
+    docker tag $DOCKER_IMAGE_TAG_LONG $DOCKER_IMAGE_TAG
 
-    docker push $DOCKER_DATE_IMAGE
-    echo "HSL timetable container pushed as $DOCKER_DATE_IMAGE"
+    docker push $DOCKER_IMAGE_TAG_LONG
+    echo "HSL timetable container pushed as $DOCKER_IMAGE_TAG_LONG"
 
-    docker push $DOCKER_CUSTOM_IMAGE_TAG
-    echo "HSL timetable container pushed as $DOCKER_CUSTOM_IMAGE_TAG"
+    docker push $DOCKER_IMAGE_TAG
+    echo "HSL timetable container pushed as $DOCKER_IMAGE_TAG"
 else
     echo "No tag defined"
 fi
