@@ -1,4 +1,4 @@
-FROM hsldevcom/hsl-map-publisher:latest
+FROM hsldevcom/hsl-map-publisher:production
 
 USER root
 
