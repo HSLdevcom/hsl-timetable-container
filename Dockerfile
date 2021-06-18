@@ -4,12 +4,11 @@ USER root
 
 WORKDIR /opt/timetable-data-builder
 
-RUN apt-get update && apt-get install -y p7zip-full cron curl jq && \
-    cd /opt/timetable-data-builder && \
-    curl -O https://download.docker.com/linux/static/stable/x86_64/docker-18.03.1-ce.tgz && \
-    tar xzf docker-18.03.1-ce.tgz && \
-    cp docker/* /usr/bin/ ; rm -rf docker*
-
+RUN apt-get update && apt-get install -y p7zip-full cron curl jq apt-transport-https ca-certificates gnupg lsb-release && \
+ curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
+ echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \
+  $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+  apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io
 
 ADD publisher-scripts /opt/publisher
 ADD fonts.zip /opt/publisher/fonts.zip
