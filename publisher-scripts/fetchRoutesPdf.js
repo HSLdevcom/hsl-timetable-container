@@ -14,9 +14,15 @@ const TAKU_KEY = process.env.TAKU_KEY;
 
 // get all route gtfsId values
 async function fetchRouteIds() {
+    authenticationHeader = process.env.AUTHENTICATION_HEADER;
+    authenticationToken = process.env.AUTHENTICATION_TOKEN;
+    headers = { "Content-Type": "application/json" }
+    if (authenticationHeader && authenticationToken) {
+        headers[authenticationHeader] = authenticationToken;
+    }
     const options = {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: headers,
         body: JSON.stringify({ query: "query routes {routes { gtfsId }}" }),
     };
 

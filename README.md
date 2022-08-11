@@ -14,3 +14,5 @@ This repository is used for generating stop timetables and fetching route timeta
 * DOCKER_AUTH - password for docker account used for pushing new images
 * DOCKER_TAG - New images are deployed with this docker image tag
 * SLACK_WEBHOOK_URL - Slack webhook URL for sending slack messages
+* AUTHENTICATION_HEADER - header used for authenticating calls to routing API
+* AUTHENTICATION_TOKEN - value for the authentication header for calls to routing API
