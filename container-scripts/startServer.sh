@@ -6,5 +6,5 @@ mkdir -p ~/.local/share/fonts/opentype && \
 cp /fonts/* ~/.local/share/fonts/opentype && \
 fc-cache -f -v && \
 mkdir -p ./output && \
-PORT=5000 node_modules/.bin/forever start -c "yarn serve" ./ && \
+yarn start:production && \
 sleep 10
