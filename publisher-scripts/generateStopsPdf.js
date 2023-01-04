@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
 const generator = require("./scripts/generator");
 
 
-const timetableCount = parseInt(process.env.STOP_TIMETABLE_LIMIT) || 0;
+const timetableCount = parseInt(process.env.STOP_TIMETABLE_LIMIT) || 0;
 
 
 
@@ -26,13 +26,17 @@ async function generateStopTimetables(representativeDate, forceStopIds) {
     if (timetableCount > 0) {
         stopIds = stopIds.slice(0,timetableCount)
     }
-    return Promise.all(stopIds.map(stopId => generator.generate({
-        id: stopId,
-        component: "Timetable",
-        props: { stopId, date: representativeDate, printTimetablesAsA4: true },
-        onInfo: s => console.log("info on ", stopId, ":", s),
-        onError: (err) => { console.log("error on", stopId); console.error(err); },
-    })));
+    const results = [];
+    for(const stopId of stopIds) {
+        await generator.generate({
+            id: stopId,
+            component: "Timetable",
+            props: { stopId, date: representativeDate, printTimetablesAsA4: true },
+            onInfo: s => console.log("info on ", stopId, ":", s),
+            onError: (err) => { console.log("error on", stopId); console.error(err); },
+        }).then(res => results.push(res));
+    }
+    return results;
 }
 
 
