@@ -22,26 +22,29 @@ while true; do
     fi
 
     echo "HSL timetable data build started"
-    if [ -v SLACK_WEBHOOK_URL ]; then
-        curl -X POST -H 'Content-type: application/json' \
-             --data '{"username":"HSL timetable builder","text":"HSL timetable data build started\n"}' $SLACK_WEBHOOK_URL
+    if [ -n "${SLACK_CHANNEL_ID}" ]; then
+        MSG='{"channel": "'$SLACK_CHANNEL_ID'", "text":"HSL timetable build started", "username": "HSL timetable builder"}'
+        TIMESTAMP=$(curl -X POST -H 'Content-Type: application/json' -H "Authorization: Bearer $SLACK_ACCESS_TOKEN" -H 'Accept: */*' \
+          -d "$MSG" 'https://slack.com/api/chat.postMessage' | jq -r .ts)
     fi
 
-
-    /opt/timetable-data-builder/build_timetables.sh
     SUCCESS=$?
     if [ $SUCCESS -eq 0 ]; then
         echo "HSL timetable data build finished"
-        if [ -v SLACK_WEBHOOK_URL ]; then
-                { echo -e "HSL timetable data build finished:\n..."; tail -n 1 /tmp/generate.log && tail -n 1 /tmp/fetch.log; } | \
-                jq -R -s '{text: .,username:"HSL timetable builder"}' | curl -X POST -H 'Content-type: application/json' -d@- $SLACK_WEBHOOK_URL
+        if [ -n "${SLACK_CHANNEL_ID}" ]; then
+            MSG=$({ echo -e "HSL timetable data build finished :white_check_mark:\n"; tail -n 1 /tmp/generate.log && tail -n 1 /tmp/fetch.log; } | \
+		jq -R -s '{"channel": "'$SLACK_CHANNEL_ID'", "username": "HSL timetable builder", "thread_ts": "'$TIMESTAMP'", "text": .}')
+            curl -X POST -H 'Content-Type: application/json' -H "Authorization: Bearer $SLACK_ACCESS_TOKEN" -H 'Accept: */*' -d "$MSG" 'https://slack.com/api/chat.update'
         fi
     else
         echo "HSL timetable data build failed"
-        if [ -v SLACK_WEBHOOK_URL ]; then
+        if [ -n "${SLACK_CHANNEL_ID}" ]; then
             #extract log end which most likely contains info about failure
-            { echo -e "HSL timetable data build failed:\n..."; tail -n 40 /cronlogs/cron.log; } | jq -R -s '{text: .,username:"HSL timetable builder"}' | \
-                curl -X POST -H 'Content-type: application/json' -d@- $SLACK_WEBHOOK_URL
+            MSG=$({ echo -e "Dataloading log: \n"; tail -n 40 /cronlogs/cron.log; } | jq -R -s '{"channel": "'$SLACK_CHANNEL_ID'", "username": "HSL timetable builder", "thread_ts": "'$TIMESTAMP'", "text": .}')
+            curl -X POST -H 'Content-Type: application/json' -H "Authorization: Bearer $SLACK_ACCESS_TOKEN" -H 'Accept: */*' -d "$MSG" 'https://slack.com/api/chat.postMessage'
+
+            MSG='{"channel": "'$SLACK_CHANNEL_ID'", "text": "HSL timetable build failed :boom:", "username": "HSL timetable builder", "ts": "'$TIMESTAMP'"}'
+            curl -X POST -H 'Content-Type: application/json' -H "Authorization: Bearer $SLACK_ACCESS_TOKEN" -H 'Accept: */*' -d "$MSG" 'https://slack.com/api/chat.update'
         fi
     fi
 
