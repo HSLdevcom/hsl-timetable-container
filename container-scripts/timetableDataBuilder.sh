@@ -32,8 +32,8 @@ while true; do
     if [ $SUCCESS -eq 0 ]; then
         echo "HSL timetable data build finished"
         if [ -n "${SLACK_CHANNEL_ID}" ]; then
-            MSG=$({ echo -e "HSL timetable data build finished :white_check_mark:\n"; tail -n 1 /tmp/generate.log && tail -n 1 /tmp/fetch.log; } | \
-		jq -R -s '{"channel": "'$SLACK_CHANNEL_ID'", "username": "HSL timetable builder", "thread_ts": "'$TIMESTAMP'", "text": .}')
+            MSG=$({ echo -e "HSL timetable data build finished :white_check_mark:\n"; tail -n 1 /tmp/generate.log && tail -n 1 /tmp/fetch.log; } | jq -R -s '{"channel": "'$SLACK_CHANNEL_ID'", "username": "HSL timetable builder", "thread_ts": "'$TIMESTAMP'", "text": .}')
+	    echo $MSG
             curl -X POST -H 'Content-Type: application/json' -H "Authorization: Bearer $SLACK_ACCESS_TOKEN" -H 'Accept: */*' -d "$MSG" 'https://slack.com/api/chat.update'
         fi
     else
