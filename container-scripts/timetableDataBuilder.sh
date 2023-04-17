@@ -8,13 +8,13 @@ SLACKUPDATEURL='https://slack.com/api/chat.update'
 # param1: slack message
 # param2: slack url
 function slackpost {
-    curl -X POST -H 'Content-Type: application/json' -H "Authorization: Bearer $SLACK_ACCESS_TOKEN" -H 'Accept: */*' -d "$1" $2
+    curl -X POST -H 'Content-Type: application/json' -H "Authorization: Bearer $SLACK_ACCESS_TOKEN" -H 'Accept: */*' -d "$1" "$2"
 }
 
 echo "$SLACKUSER started"
 if [ -n "${SLACK_CHANNEL_ID}" ]; then
     MSG='{"channel": "'$SLACK_CHANNEL_ID'", "text":"'$SLACKUSER' started", "username": "'$SLACKUSER'"}'
-    TIMESTAMP=$(slackpost $MSG $SLACKPOSTURL | jq -r .ts)
+    TIMESTAMP=$(slackpost "$MSG" "$SLACKPOSTURL" | jq -r .ts)
 fi
 
 /opt/timetable-data-builder/build_timetables.sh
