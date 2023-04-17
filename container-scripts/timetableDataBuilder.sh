@@ -17,7 +17,9 @@ if [ -n "${SLACK_CHANNEL_ID}" ]; then
     TIMESTAMP=$(slackpost $MSG $SLACKPOSTURL | jq -r .ts)
 fi
 
+/opt/timetable-data-builder/build_timetables.sh
 SUCCESS=$?
+
 if [ $SUCCESS -eq 0 ]; then
     echo "$SLACKUSER finished"
     if [ -n "${SLACK_CHANNEL_ID}" ]; then
