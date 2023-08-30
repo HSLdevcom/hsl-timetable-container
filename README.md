@@ -1,6 +1,6 @@
 # HSL-TIMETABLE-CONTAINER (BUILDER) 
 
-This repository is used for generating stop timetables and fetching route timetables. This builds into a hsl-timetable-builder image and that image is used to build hsl-timetable-container images. This project uses docker image built from https://github.com/hsldevcom/hsl-map-publisher.
+This repository is used for generating stop timetables and fetching route timetables. This builds into a hsl-timetable-builder image and that image is used to build hsl-timetable-container images. This project uses docker image built from https://github.com/hsldevcom/hsl-map-publisher. Everytime something is changed within this project, we get the latest updates from the hsl-map-publisher project.
 
 ## Configuration env variables
 
