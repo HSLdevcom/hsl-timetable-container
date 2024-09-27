@@ -1,11 +1,11 @@
 const fs = require("fs");
 const fetch = require("node-fetch");
 
-const ROUTE_TIMETABLE_COUNT = parseInt(process.env.ROUTE_TIMETABLE_LIMIT) || 0;
+const ROUTE_TIMETABLE_COUNT = parseInt(process.env.ROUTE_TIMETABLE_LIMIT) || 0;
 
-const DIGITRANSIT_API_URL = process.env.DIGITRANSIT_API_URL || "https://api.digitransit.fi";
+const DIGITRANSIT_API_URL = process.env.DIGITRANSIT_API_URL || "https://api.digitransit.fi";
 
-const API_URL = `${DIGITRANSIT_API_URL}/routing/v1/routers/hsl/index/graphql`;
+const API_URL = `${DIGITRANSIT_API_URL}/routing/v2/hsl/gtfs/v1`;
 
 const TAKU_API_URL = process.env.TAKU_API_URL;
 
