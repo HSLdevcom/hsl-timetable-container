@@ -5,6 +5,8 @@ cd /opt/publisher
 mkdir -p ~/.local/share/fonts/opentype && \
 cp /fonts/* ~/.local/share/fonts/opentype && \
 fc-cache -f -v && \
-mkdir -p ./output && \
-yarn start:production && \
+mkdir -p ./output
+yarn run server &
+yarn run worker &
+yarn run start &
 sleep 10
