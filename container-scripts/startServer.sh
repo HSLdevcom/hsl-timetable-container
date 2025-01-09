@@ -9,4 +9,4 @@ mkdir -p ./output
 yarn run server &
 yarn run worker &
 yarn run start &
-sleep 10
+sleep 60
